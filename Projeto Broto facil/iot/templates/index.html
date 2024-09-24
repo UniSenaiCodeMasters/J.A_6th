@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Cultivo Inteligente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Dashboard de Cultivo Inteligente</h1>
+    <div id="real-time-data">
+        <h2>Dados em Tempo Real</h2>
+        <p>Temperatura: <span id="temperature">--</span> °C</p>
+        <p>Umidade: <span id="humidity">--</span> %</p>
+        <p>Nível de Água: <span id="water-level">--</span></p>
+        <p>Nível de Luz: <span id="light-level">--</span> %</p>
+        <p>Altura da Planta: <span id="plant-height">--</span> cm</p>
+    </div>
+    <div id="historical-data">
+        <h2>Dados Históricos</h2>
+        <canvas id="chart"></canvas>
+    </div>
+    <div id="controls">
+        <h2>Controles dos Atuadores</h2>
+        <button onclick="controlActuator('water_pump', 'on')">Ligar Bomba de Água</button>
+        <button onclick="controlActuator('water_pump', 'off')">Desligar Bomba de Água</button>
+        <!-- Adicione mais controles conforme necessário -->
+    </div>
+    <div id="alerts">
+        <h2>Alertas</h2>
+        <ul id="alert-list"></ul>
+    </div>
+
+    <div id="plant-settings">
+        <h2>Configurações da Planta</h2>
+        <form id="settings-form">
+            <label for="plant-name">Nome da Planta:</label>
+            <input type="text" id="plant-name" name="plant_name"><br><br>
+            <label for="optimal-temperature">Temperatura Ótima (°C):</label>
+            <input type="number" id="optimal-temperature" name="optimal_temperature"><br><br>
+            <label for="optimal-humidity">Umidade Ótima (%):</label>
+            <input type="number" id="optimal-humidity" name="optimal_humidity"><br><br>
+            <label for="light-start-time">Início da Luz:</label>
+            <input type="time" id="light-start-time" name="light_start_time"><br><br>
+            <label for="light-end-time">Fim da Luz:</label>
+            <input type="time" id="light-end-time" name="light_end_time"><br><br>
+            <label for="led-red-intensity">Intensidade LED Vermelho:</label>
+            <input type="range" id="led-red-intensity" name="led_red_intensity" min="0" max="255"><br><br>
+            <label for="led-green-intensity">Intensidade LED Verde:</label>
+            <input type="range" id="led-green-intensity" name="led_green_intensity" min="0" max="255"><br><br>
+            <label for="led-white-intensity">Intensidade LED Branco:</label>
+            <input type="range" id="led-white-intensity" name="led_white_intensity" min="0" max="255"><br><br>
+            <button type="button" onclick="submitSettings()">Salvar Configurações</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
+
+
+<!-- Adicionar na seção do HTML -->
+

@@ -1,0 +1,17 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+#real-time-data, #historical-data, #controls, #alerts {
+    margin-bottom: 30px;
+}
+
+button {
+    margin-right: 10px;
+    padding: 10px 20px;
+}
