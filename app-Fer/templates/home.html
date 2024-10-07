@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Início - Admin{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <p>Bem-vindo (a), {{ current_user.nome_usuario }} (Admin)!</p>
+
+        <h3>Produtos Associados</h3>
+        <div class="produtos">
+            <!-- Botão para abrir o modal -->
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#adicionarProdutoModal">
+                +
+            </button>
+            {% if produtos %}
+                {% for produto in produtos %}
+                    <li>
+                        <a href="{{ url_for('auth.produto', produto_id=produto.id) }}">
+                            <strong>{{ produto.nome }}</strong>
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p>Nenhum produto associado ao usuário.</p>
+            {% endif %}
+        </div>        
+    </div>
+
+    <hr> 
+
+    <!-- Modal -->
+    <div class="modal fade" id="adicionarProdutoModal" tabindex="-1" aria-labelledby="adicionarProdutoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adicionarProdutoModalLabel">Adicionar Produto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulário para adicionar produto -->
+                    <form action="{{ url_for('auth.adicionar_produto') }}" method="POST">
+                        <div class="form-group">
+                            <label for="nome">Nome do Produto</label>
+                            <input type="text" id="nome" name="nome" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descricao">Descrição do Produto</label>
+                            <textarea id="descricao" name="descricao" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="empresa">Empresa</label>
+                            <input type="text" id="empresa" name="empresa" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Adicionar Produto</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

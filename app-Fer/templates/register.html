@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Registrar-se{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Registrar-se</h2>
+    
+    <!-- Exibição de mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ 'alert-' + category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Formulário de Registro usando FlaskForm -->
+    <form method="POST">
+        {{ form.hidden_tag() }}
+    
+        <div class="form-group">
+            {{ form.username.label }} <!-- Nome de usuário -->
+            {{ form.username(class="form-control") }} <!-- Campo de texto -->
+        </div>
+    
+        <div class="form-group">
+            {{ form.email.label }} <!-- E-mail -->
+            {{ form.email(class="form-control") }} <!-- Campo de texto -->
+        </div>
+    
+        <div class="form-group">
+            {{ form.password.label }} <!-- Senha -->
+            {{ form.password(class="form-control") }} <!-- Campo de senha -->
+        </div>
+    
+        <div class="form-group">
+            {{ form.role.label }} <!-- Papel -->
+            {{ form.role(class="form-control") }} <!-- Campo de seleção -->
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Registrar-se</button>
+    </form>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Entrar</h2>
+    
+    <!-- Exibição de mensagens flash -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ 'alert-' + category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Formulário usando FlaskForm -->
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        <div class="form-group">
+            {{ form.username.label }} <!-- Label do campo nome de usuário -->
+            {{ form.username(class="form-control") }} <!-- Campo de entrada para nome de usuário -->
+        </div>
+        
+        <div class="form-group">
+            {{ form.password.label }} <!-- Label do campo senha -->
+            {{ form.password(class="form-control") }} <!-- Campo de entrada para senha -->
+        </div>
+        
+        <div class="form-group">
+            {{ form.remember() }} <!-- Checkbox para lembrar de mim -->
+            {{ form.remember.label }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Entrar</button>
+    </form>
+    
+</div>
+{% endblock %}

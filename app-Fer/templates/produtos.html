@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Início{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{ produto.nome }}</h2>
+        <p><strong>Descrição:</strong> {{ produto.descricao }}</p>
+        <p><strong>Empresa:</strong> {{ produto.empresa }}</p>
+        
+        <div class="pwm-bar">
+            <h4>PWM</h4>
+            <div>
+                <input type="range" id="volume" name="volume" min="0" max="11" />
+            </div>
+            <div class="range-labels">
+                <span>0</span>
+                <span>1024</span>
+            </div>
+        </div>
+        <div class="section">
+            <h3>Temperatura do ambiente</h3>
+        </div>
+
+        <div class="section">
+            <h3>Humidade do ambiente</h3>
+        </div>
+
+        <div class="section">
+            <h3>Intensidade da luz</h3>
+        </div>
+
+        <div class="section">
+            <h3>Humidade do solo</h3>
+        </div>
+
+        <div class="section">
+            <h3>Tempo vs Temperatura</h3>
+            <div class="tabs">
+                <button class="active">Ao vivo</button>
+                <button>1D</button>
+                <button>7D</button>
+                <button>15D</button>
+                <button>1M</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Tempo vs Umidade</h3>
+            <div class="tabs">
+                <button class="active">Ao vivo</button>
+                <button>1D</button>
+                <button>7D</button>
+                <button>15D</button>
+                <button>1M</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
