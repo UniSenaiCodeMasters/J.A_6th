@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4">Dashboard</h1>
+        <p class="lead">Bem-vindo(a) ao seu Dashboard, {{ current_user.nome_usuario }}!</p><br>
+    </div>
+
+    <!-- Seletor de microcontrolador -->
+    <div class="form-group mb-4">
+        <label for="microcontrolador" class="h5">Microcontrolador:</label>
+        <select name="microcontrolador" id="microcontrolador" class="form-control shadow-sm border-success">
+            <option value="ABC-123">ABC-123</option>
+            {% for microcontrolador in microcontroladores %}
+                <!-- <option value="{{ microcontrolador.id }}">{{ microcontrolador.nome }}</option> -->
+            {% endfor %}
+        </select>
+    </div>
+    <!-- <br><button id="btnBuscarMicrocontrolador" class="btn btn-primary">Buscar</button> -->
+
+<!-- Área para exibir dados específicos do microcontrolador -->
+    <div id="dadosMicrocontrolador" class="mt-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4">Estatísticas Ambientais</h2>
+                <canvas id="estadosAmbientais" class="my-3 mx-auto d-block"></canvas>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h3 class="h5 mb-3">Médias do Ambiente</h3>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Temperatura Média do Ambiente
+                        <span class="badge bg-primary rounded-pill">{{ media_temperatura | round(2) }} °C</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Umidade Média do Ambiente
+                        <span class="badge bg-primary rounded-pill">{{ media_umidade | round(2) }} %</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Intensidade da Luz Média
+                        <span class="badge bg-primary rounded-pill">{{ media_luminosidade | round(2) }} Lux</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        PMW Médio
+                        <span class="badge bg-primary rounded-pill">{{ media_pmw | round(2) }} %</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Umidade do Solo Média
+                        <span class="badge bg-primary rounded-pill">{{ media_umidade_solo | round(2) }} %</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Gráficos Exclusivos para Cada Métrica -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Temperatura Média</h4>
+                    <canvas id="temperaturaChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Umidade Média do Ambiente</h4>
+                        <canvas id="umidadeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">PMW Médio</h4>
+                        <canvas id="pmwChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Umidade do Solo Média</h4>
+                        <canvas id="umidadeSoloChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            const ctx = document.getElementById('estadosAmbientais').getContext('2d');
+            const estadosAmbientaisChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{
+                        label: 'Temperatura (°C)',
+                        data: [{{ data_temperatura|join(',') }}],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 1,
+                        tension: 0.4,
+                        fill: true                  
+                    }, {
+                        label: 'Umidade (%)',
+                        data: [{{ data_umidade|join(',') }}],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderWidth: 1,
+                        tension: 0.4,
+                        fill: true                 
+                    }, {
+                        label: 'PMW (%)',
+                        data: [{{ data_pmw|join(',') }}],
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        borderWidth: 1,
+                        tension: 0.4,
+                        fill: true                 
+                    }, {
+                        label: 'Umidade do Solo (%)',
+                        data: [{{ data_umidade_solo|join(',') }}],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 1,
+                        tension: 0.4,
+                        fill: true                 
+                    }]
+                },
+                options: {
+                animation: {
+                    duration: 2000, // Duração mais longa para a entrada
+                    easing: 'easeOutBounce' // Efeito de entrada suave
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#333',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+            });
+
+            // Gráfico Temperatura Média
+            new Chart(document.getElementById('temperaturaChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{
+                        label: 'Temperatura Média (%)',
+                        data: [{{ data_temperatura|join(',') }}],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+
+            // Gráfico Umidade Média do Ambiente
+            new Chart(document.getElementById('umidadeChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{
+                        label: 'Umidade (%)',
+                        data: [{{ data_umidade|join(',') }}],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+
+            // Gráfico PMW Médio
+            new Chart(document.getElementById('pmwChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{
+                        label: 'PMW (%)',
+                        data: [{{ data_pmw|join(',') }}],
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+
+            // Gráfico Umidade do Solo Média
+            new Chart(document.getElementById('umidadeSoloChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    datasets: [{
+                        label: 'Umidade do Solo (%)',
+                        data: [{{ data_umidade_solo|join(',') }}],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+        </script>
+    </div>
+</div>
+
+<script>
+    document.getElementById('btnBuscarMicrocontrolador').addEventListener('click', function() {
+        const microcontroladorId = document.getElementById('microcontrolador').value;
+        
+        fetch(`/microcontrolador/${microcontroladorId}`)
+            .then(response => response.json())
+            .then(data => {
+                const dadosDiv = document.getElementById('dadosMicrocontrolador');
+                dadosDiv.innerHTML = `
+                    <h5>Dados do Microcontrolador Selecionado</h5>
+                    <p>Nome: ${data.nome}</p>
+                    <p>Descrição: ${data.descricao}</p>
+                    <p>Empresa: ${data.empresa}</p>
+                `;
+            })
+            .catch(error => console.error('Erro ao buscar dados:', error));
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Configurações e Ajustes de LEDs{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Título principal -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-success">Configurações de LEDs</h1>
+        <p class="lead">Bem-vindo (a), {{ current_user.nome_usuario }}! Ajuste as configurações de LEDs abaixo.</p>
+    </div>
+
+    <!-- Formulário -->
+    <form method="POST" action="{{ url_for('auth.configuracoes') }}" class="shadow-lg p-4 rounded bg-light">
+        
+        <!-- Seletor de microcontrolador -->
+        <div class="form-group mb-4">
+            <label for="microcontrolador" class="h5">Microcontrolador:</label>
+            <select name="microcontrolador" id="microcontrolador" class="form-control shadow-sm border-success">
+                {% for microcontrolador in microcontroladores %}
+                    <option value="{{ microcontrolador.id }}">{{ microcontrolador.nome }}</option>
+                {% endfor %}
+            </select>
+        </div><br>
+
+        <!-- Configuração LED 1 -->
+        <div class="led-config mb-4">
+            <label for="luminosidade_leds1" class="h5" style="color: blue;">Luminosidade Azul:</label>
+            <input type="number" name="luminosidade_leds1" id="luminosidade_leds1" value="{{ luminosidade_leds1 }}" oninput="updatePercentage('led1', this)" class="form-control shadow-sm">
+            <div class="progress-container mt-2">
+                <div class="progress-bar bg-info" id="led1-circle" style="width: {{ luminosidade_leds1 }}%; background-color: blue;"></div>
+            </div>
+            <span id="led1-percentage">{{ luminosidade_leds1 }}%</span>
+        </div>
+
+        <!-- Configuração LED 2 -->
+        <div class="led-config mb-4">
+            <label for="luminosidade_leds2" class="h5" style="color: green;">Luminosidade Verde:</label>
+            <input type="number" name="luminosidade_leds2" id="luminosidade_leds2" value="{{ luminosidade_leds2 }}" oninput="updatePercentage('led2', this)" class="form-control shadow-sm">
+            <div class="progress-container mt-2">
+                <div class="progress-bar bg-info" id="led2-circle" style="width: {{ luminosidade_leds2 }}%; background-color: green;"></div>
+            </div>
+            <span id="led2-percentage">{{ luminosidade_leds2 }}%</span>
+        </div>
+
+        <!-- Configuração LED 3 -->
+        <div class="led-config mb-4">
+            <label for="luminosidade_leds3" class="h5" style="color: red;">Luminosidade Vermelho:</label>
+            <input type="number" name="luminosidade_leds3" id="luminosidade_leds3" value="{{ luminosidade_leds3 }}" oninput="updatePercentage('led3', this)" class="form-control shadow-sm">
+            <div class="progress-container mt-2">
+                <div class="progress-bar bg-info" id="led3-circle" style="width: {{ luminosidade_leds3 }}%; background-color: red;"></div>
+            </div>
+            <span id="led3-percentage">{{ luminosidade_leds3 }}%</span>
+        </div>
+
+        <div class="led-config mb-4">
+            <h1 class="display-4 text-success">Configurações de Temperatura</h1>
+            <p class="lead">Defina os limites de Temperatura abaixo.</p>
+
+            <label for="temperature_limit">Limite de Temperatura (&deg;C):</label>
+            <input type="number" id="temperature_limit" name="temperature_limit" step="0.1" value="{{ settingst.temperature_limit }}"><br>
+
+<!--            <label for="distance_limit">Limite de Distância (cm):</label>
+            <input type="number" id="distance_limit" name="distance_limit" step="0.1" value="{{ settingst.distance_limit }}"><br> -->
+
+            <h1 class="display-4 text-success">Configurações de Umidade</h1>
+            <p class="lead">Defina os limites de Umidade abaixo.</p>
+
+            <label for="humidity_limit">Limite de Umidade (%):</label>
+            <input type="number" id="humidity_limit" name="humidity_limit" step="0.1" value="{{ settingst.humidity_limit }}"><br>
+
+<!--            <label for="distance_limit">Limite de Distância (cm):</label>
+            <input type="number" id="distance_limit" name="distance_limit" step="0.1" value="{{ settingst.distance_limit }}"><br> -->
+        </div>
+
+        <!-- Botão de Submit -->
+        <button type="submit" class="btn btn-success btn-lg btn-block mt-4">Atualizar Configurações</button>
+    </form>    
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mt-4">
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="alert alert-{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<script>
+    function updatePercentage(ledId, inputElement) {
+        // Obter o valor inserido
+        let value = inputElement.value;
+
+        // Garantir que o valor esteja entre 0 e 100
+        if (value < 0) {
+            value = 0;
+        } else if (value > 100) {
+            value = 100;
+        }
+
+        // Atualizar a visualização
+        document.getElementById(`${ledId}-percentage`).innerText = `${value}%`;
+        document.getElementById(`${ledId}-circle`).style.width = `${value}%`;
+
+        // Atualizar o campo de entrada com o valor corrigido
+        inputElement.value = value;
+    }
+</script>
+{% endblock %}

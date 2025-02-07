@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4 text-primary">Perfil de Usuário</h1>
+        <p class="lead">Bem-vindo(a), {{ current_user.nome_usuario }}!</p>
+    </div>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="card-title">Informações de Conta</h5>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Email:</strong> {{ current_user.email }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Nome de Usuário:</strong> {{ current_user.nome_usuario }}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

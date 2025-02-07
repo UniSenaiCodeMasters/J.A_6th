@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Configurações e Ajustes de LEDs{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Título principal -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 text-success">Configurações de LEDs</h1>
+        <p class="lead">Bem-vindo (a), {{ current_user.nome_usuario }}! Ajuste as configurações de LEDs abaixo.</p><br>
+    </div>
+
+    <!-- Formulário -->
+    <form method="POST" action="{{ url_for('auth.configuracoes') }}" class="shadow-lg p-4 rounded bg-light">
+        
+        <!-- Seletor de microcontrolador -->
+        <div class="form-group mb-4">
+            <label for="microcontrolador" class="h5">Microcontrolador:</label>
+            <select name="microcontrolador" id="microcontrolador" class="form-control shadow-sm border-success">
+                {% for microcontrolador in microcontroladores %}
+                    <option value="{{ microcontrolador.id }}">{{ microcontrolador.nome }}</option>
+                {% endfor %}
+            </select>
+        </div><br>
+
+        <!-- Configuração LED 1 -->
+        <div class="led-config mb-4">
+            <label for="luminosidade_leds1" class="h5">Luminosidade LED 1:</label>
+            <input type="number" name="luminosidade_leds1" id="luminosidade_leds1" value="{{ luminosidade_leds1 }}" oninput="updatePercentage('led1', this)" class="form-control shadow-sm">
+            <div class="progress-container mt-2">
+                <div class="progress-bar bg-info" id="led1-circle" style="width: {{ luminosidade_leds1 }}%;"></div>
+            </div>
+            <span id="led1-percentage">{{ luminosidade_leds1 }}%</span>
+        </div>
+
+        <!-- Configuração LED 2 -->
+        <div class="led-config mb-4">
+            <label for="luminosidade_leds2" class="h5">Luminosidade LED 2:</label>
+            <input type="number" name="luminosidade_leds2" id="luminosidade_leds2" value="{{ luminosidade_leds2 }}" oninput="updatePercentage('led2', this)" class="form-control shadow-sm">
+            <div class="progress-container mt-2">
+                <div class="progress-bar bg-info" id="led2-circle" style="width: {{ luminosidade_leds2 }}%;"></div>
+            </div>
+            <span id="led2-percentage">{{ luminosidade_leds2 }}%</span>
+        </div>
+
+        <!-- Configuração LED 3 -->
+        <div class="led-config mb-4">
+            <label for="luminosidade_leds3" class="h5">Luminosidade LED 3:</label>
+            <input type="number" name="luminosidade_leds3" id="luminosidade_leds3" value="{{ luminosidade_leds3 }}" oninput="updatePercentage('led3', this)" class="form-control shadow-sm">
+            <div class="progress-container mt-2">
+                <div class="progress-bar bg-info" id="led3-circle" style="width: {{ luminosidade_leds3 }}%;"></div>
+            </div>
+            <span id="led3-percentage">{{ luminosidade_leds3 }}%</span>
+        </div>
+
+        <!-- Botão de Submit -->
+        <button type="button" class="btn btn-success btn-lg btn-block mt-4" onclick="enviarConfiguracoes()">Atualizar Configurações</button>
+    </form>    
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mt-4">
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <li class="alert alert-{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<script>
+    function updatePercentage(ledId, inputElement) {
+        let value = inputElement.value;
+        if (value < 0) value = 0;
+        if (value > 100) value = 100;
+
+        document.getElementById(`${ledId}-percentage`).innerText = `${value}%`;
+        document.getElementById(`${ledId}-circle`).style.width = `${value}%`;
+        inputElement.value = value;
+    }
+
+    // Função para enviar as configurações para o servidor
+    function enviarConfiguracoes() {
+        let luminosidade_leds1 = document.getElementById("luminosidade_leds1").value;
+        let luminosidade_leds2 = document.getElementById("luminosidade_leds2").value;
+        let luminosidade_leds3 = document.getElementById("luminosidade_leds3").value;
+        let microcontrolador = document.getElementById("microcontrolador").value;
+
+        fetch("/auth/atualizar_leds", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                luminosidade_leds1: luminosidade_leds1,
+                luminosidade_leds2: luminosidade_leds2,
+                luminosidade_leds3: luminosidade_leds3,
+                microcontrolador: microcontrolador,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Configurações enviadas com sucesso!');
+            } else {
+                alert('Erro ao enviar configurações.');
+            }
+        })
+        .catch(error => console.log('Erro: ', error));
+    }
+</script>
+{% endblock %}

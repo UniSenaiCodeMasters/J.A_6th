@@ -1,0 +1,166 @@
+/* Reseta margens, padding e fontes */
+body, html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif; /* Fonte moderna */
+    background-color: #275902; /* Fundo verde sólido */
+    height: 100%;
+}
+
+/* Container Principal */
+.auth-container {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centralizado no desktop */
+    height: 100vh; /* Ocupa toda a altura da viewport */
+    background-color: #275902;
+}
+
+/* Card de Autenticação */
+.auth-card {
+    background-color: #f8f9fa; /* Fundo branco */
+    padding: 30px;
+    border-radius: 15px; /* Bordas arredondadas */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra suave */
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    opacity: 1; /* Visível por padrão */
+    transform: scale(1); /* Tamanho inicial */
+    transition: all 0.5s ease; /* Suaviza alterações */
+}
+
+/* Animações de Entrada e Saída */
+.auth-card.fade-in {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Entrada suave */
+}
+
+.auth-card.fade-out {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9); /* Saída com redução */
+}
+
+/* Títulos */
+.auth-card h2 {
+    color: #275902; /* Verde escuro */
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.alert{
+    text-align: center;
+    margin-bottom: 15px;
+}
+/* Formulário */
+.form-group {
+    margin-bottom: 20px; /* Espaçamento uniforme entre os campos */
+    text-align: left; /* Alinha os labels à esquerda (se necessário) */
+    width: 93%;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px; /* Mais espaço interno */
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Bordas arredondadas */
+    background-color: #fff;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra interna */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #275902; /* Cor verde no foco */
+    outline: none;
+    box-shadow: 0 0 5px rgba(11, 61, 11, 0.5); /* Sombra externa no foco */
+}
+
+/* Botão */
+.btn {
+    background-color: #275902;
+    color: #fff;
+    padding: 12px; /* Botão maior */
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px; /* Bordas arredondadas */
+    width: 100%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #275902;
+    transform: translateY(-2px); /* Destaque no hover */
+}
+
+/* Links */
+.auth-card a {
+    display: inline-block;
+    color: #275902; /* Verde mais vivo */
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    margin-top: 10px; /* Espaçamento do link */
+}
+
+.auth-card a:hover {
+    color: #275902; /* Verde mais forte no hover */
+}
+
+.navbar-collapse {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-brand img {
+    max-height: 80px;
+    height: auto;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .auth-container {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        height: 100%; /* Fundo ocupa toda a altura */
+    }
+
+    .auth-card {
+        width: 100%; /* Card ocupa toda a largura */
+        height: 60%; /* Ajusta a altura no celular */
+        border-radius: 30px 30px 30px 30px; /* Apenas bordas superiores arredondadas */
+        padding: 20px; /* Reduz o padding */
+    }
+
+    .auth-card h2 {
+        font-size: 1.5rem; /* Reduz o tamanho do título */
+    }
+
+    .form-group {
+        width: 92%;
+        margin-bottom: 15px; /* Ajusta o espaçamento no celular */
+    }
+
+    .form-control {
+        font-size: 0.9rem; /* Tamanho reduzido no celular */
+        padding: 10px; /* Padding ajustado */
+    }
+
+    .btn {
+        font-size: 0.95rem; /* Botão adaptado */
+        padding: 10px; /* Padding menor */
+    }
+}
